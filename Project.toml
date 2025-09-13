@@ -1,0 +1,11 @@
+name = "VST"
+uuid = "6254dac8-befd-4d8f-9211-e35b0e845af1"
+version = "0.1.0"
+authors = ["Sergio Sánchez Ramírez <15837247+mofeing@users.noreply.github.com>"]
+
+[deps]
+CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+
+[compat]
+CEnum = "0.5.0"
+julia = "1.12"

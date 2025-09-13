@@ -1,0 +1,9 @@
+[general]
+output_file_path = "../src/API.jl"
+smart_de_anonymize = true
+use_deterministic_symbol = true
+output_ignorelist = []
+
+[codegen]
+use_julia_bool = true
+always_NUL_terminated_string = true
