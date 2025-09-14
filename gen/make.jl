@@ -1,5 +1,6 @@
 using Clang
 using Clang.Generators
+using MacroTools: postwalk
 
 clap_include_dir = joinpath(@__DIR__, "..", "external", "vst3_c_api")
 
@@ -10,6 +11,136 @@ ctx = Clang.create_context(String[
         joinpath(clap_include_dir, "vst3_c_api.h"),
     ], args, options)
 
+type_replacements = Dict(
+    :Steinberg_int8 => :Cchar,
+    :Steinberg_uint32 => :UInt32,
+    :char16_t => :Int16,
+    :Steinberg_uint8 => :UInt8,
+    :Steinberg_uchar => :Cuchar,
+    :Steinberg_int16 => :Int16,
+    :Steinberg_uint16 => :UInt16,
+    :Steinberg_int32 => :Int32,
+    :Steinberg_int64 => :Int64,
+    :Steinberg_uint64 => :UInt64,
+    :Steinberg_TSize => :Int64,
+    :Steinberg_tresult => :Int32,
+    :Steinberg_TPtrInt => :UInt64,
+    :Steinberg_TBool => :UInt8,
+    :Steinberg_char8 => :Cchar,
+    :Steinberg_char16 => :Int16,
+    :Steinberg_tchar => :Int16,
+    :Steinberg_CStringA => :(Ptr{Cchar}),
+    :Steinberg_CStringW => :(Ptr{Int16}),
+    :Steinberg_CString => :(Ptr{Int16}),
+    :Steinberg_FIDString => :(Ptr{Cchar}),
+    :Steinberg_UCoord => :Int32,
+    :Steinberg_LARGE_INT => :Int64,
+    :Steinberg_TUID => :(StaticString{16}),
+    :Steinberg_Vst_TChar => :Int16,
+    :Steinberg_Vst_CString => :(Ptr{Cchar}),
+    :Steinberg_Vst_String128 => :(StaticString{128 * 2}), # UTF-16 encoding so *2
+    :Steinberg_Vst_Sample32 => :Cfloat,
+    :Steinberg_Vst_Sample64 => :Cdouble,
+    :Steinberg_Vst_SampleRate => :Cdouble,
+    :Steinberg_Vst_NoteExpressionValue => :Cdouble,
+    :Steinberg_Vst_ParamValue => :Cdouble,
+)
+
+enum_joins = Dict(
+    :Steinberg_Vst_MediaType => :Int32,
+    :Steinberg_Vst_BusDirection => :Int32,
+    :Steinberg_Vst_BusType => :Int32,
+    :Steinberg_Vst_IoMode => :Int32,
+    :Steinberg_Vst_UnitID => :Int32,
+    :Steinberg_Vst_ParamValue => :Cdouble,
+    :Steinberg_Vst_ParamID => :UInt32,
+    :Steinberg_Vst_ProgramListID => :Int32,
+    :Steinberg_Vst_CtrlNumber => :Int16,
+    :Steinberg_Vst_TQuarterNotes => :Cdouble,
+    :Steinberg_Vst_TSamples => :Int64,
+    :Steinberg_Vst_ColorSpec => :UInt32,
+    :Steinberg_Vst_Sample32 => :Cfloat,
+    :Steinberg_Vst_Sample64 => :Cdouble,
+    :Steinberg_Vst_SampleRate => :Cdouble,
+    :Steinberg_Vst_SpeakerArrangement => :UInt64,
+    :Steinberg_Vst_Speaker => :UInt64,
+    :Steinberg_Vst_NoteExpressionTypeID => :UInt32,
+    :Steinberg_Vst_NoteExpressionValue => :Cdouble,
+    :Steinberg_Vst_KeyswitchTypeID => :UInt32,
+    :Steinberg_Vst_PhysicalUITypeID => :UInt32,
+    :Steinberg_Vst_KnobMode => :Int32,
+    :Steinberg_Vst_ChannelContext_ColorSpec => :UInt32,
+    :Steinberg_Vst_ChannelContext_ColorComponent => :UInt8,
+    :Steinberg_Vst_PrefetchableSupport => :UInt32,
+    :Steinberg_Vst_DataExchangeQueueID => :UInt32,
+    :Steinberg_Vst_DataExchangeBlockID => :UInt32,
+    :Steinberg_Vst_DataExchangeUserContextID => :UInt32,
+    :Steinberg_IPlugViewContentScaleSupport_ScaleFactor => :Cfloat,
+    :Steinberg_Vst_IAttributeList_AttrID => :Cstring,
+    :Steinberg_Vst_IProgress_ID => :UInt64,
+)
+
 cd(@__DIR__) do
-    Clang.build!(ctx)
+    Clang.build!(ctx, Clang.BUILDSTAGE_NO_PRINTING)
+
+    # TODO write `using StaticStrings`
+
+    for node in get_nodes(ctx.dag)
+        orig_exprs = get_exprs(node)
+        length(orig_exprs) == 0 && continue
+
+        # remove dual typedef + enum in plural boilerplate
+        # NOTE only `@cenum` seems to generate more than one Expr
+        if Base.isexpr(orig_exprs[1], :macrocall) && orig_exprs[1].args[1] === Symbol("@cenum")
+            name = string(orig_exprs[1].args[3].args[1])
+            new_name = chopsuffix(name, "s")
+
+            # rewrite enum name
+            orig_exprs[1].args[3].args[1] = Symbol(new_name)
+
+            # rewrite enum elements
+            # NOTE also remove annoying 'k' prefix
+            for enum_elem_expr in orig_exprs[2:end]
+                enum_elem_expr.args[1] = replace(string(enum_elem_expr.args[1]), "_k" => "_", name => new_name) |> Symbol
+            end
+        end
+
+        for orig_expr in orig_exprs
+            expr = orig_expr
+
+            # remove garbage intermediate types
+            expr = postwalk(expr) do sym
+                sym isa Symbol || return sym
+                get(type_replacements, sym, sym)
+            end
+
+            # format enum & type names to PascalCase
+            expr = postwalk(expr) do sym
+                sym isa Symbol || return sym
+                filter(!=('_'), string(sym)) |> Symbol
+            end
+
+            # strip annoying namespace prefixes
+            expr = postwalk(expr) do sym
+                sym isa Symbol || return sym
+                chopprefix(string(sym), "Steinberg") |> Symbol
+            end
+
+            expr = postwalk(expr) do sym
+                sym isa Symbol || return sym
+                chopprefix(string(sym), "Vst") |> Symbol
+            end
+
+            # TODO revise this is ok (add a check)
+            expr = postwalk(expr) do sym
+                sym isa Symbol || return sym
+                chopprefix(string(sym), "Event") |> Symbol
+            end
+
+            # apply changes
+            orig_expr.args = expr.args
+        end
+    end
+
+    Clang.build!(ctx, Clang.BUILDSTAGE_PRINTING_ONLY)
 end
