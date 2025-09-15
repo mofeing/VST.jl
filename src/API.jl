@@ -2,8 +2,6 @@ using CEnum: CEnum, @cenum
 
 const UnitID = Int32
 
-const ParamValue = Cdouble
-
 const ParamID = UInt32
 
 const ProgramListID = Int32
@@ -19,8 +17,6 @@ const ColorSpec = UInt32
 const SpeakerArrangement = UInt64
 
 const Speaker = UInt64
-
-const NoteExpressionValue = Cdouble
 
 const ChannelContextColorSpec = UInt32
 
@@ -348,16 +344,16 @@ struct ViewRect
 end
 
 struct NoteExpressionValueDescription
-    defaultValue::NoteExpressionValue
-    minimum::NoteExpressionValue
-    maximum::NoteExpressionValue
+    defaultValue::Cdouble
+    minimum::Cdouble
+    maximum::Cdouble
     stepCount::Int32
 end
 
 struct NoteExpressionValueEvent
     typeId::NoteExpressionTypeID
     noteId::Int32
-    value::NoteExpressionValue
+    value::Cdouble
 end
 
 struct NoteExpressionTextEvent
@@ -458,7 +454,7 @@ struct ParameterInfo
     shortTitle::StaticString{128 * 2}
     units::StaticString{128 * 2}
     stepCount::Int32
-    defaultNormalizedValue::ParamValue
+    defaultNormalizedValue::Cdouble
     unitId::UnitID
     flags::Int32
 end
