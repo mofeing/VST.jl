@@ -400,41 +400,41 @@ struct PhysicalUIMapList
 end
 
 struct PFactoryInfo
-    vendor::NTuple{64, Cchar}
-    url::NTuple{256, Cchar}
-    email::NTuple{128, Cchar}
+    vendor::NTuple{64,Cchar}
+    url::NTuple{256,Cchar}
+    email::NTuple{128,Cchar}
     flags::Int32
 end
 
 struct PClassInfo
     cid::StaticString{16}
     cardinality::Int32
-    category::NTuple{32, Cchar}
-    name::NTuple{64, Cchar}
+    category::NTuple{32,Cchar}
+    name::NTuple{64,Cchar}
 end
 
 struct PClassInfo2
     cid::StaticString{16}
     cardinality::Int32
-    category::NTuple{32, Cchar}
-    name::NTuple{64, Cchar}
+    category::NTuple{32,Cchar}
+    name::NTuple{64,Cchar}
     classFlags::UInt32
-    subCategories::NTuple{128, Cchar}
-    vendor::NTuple{64, Cchar}
-    version::NTuple{64, Cchar}
-    sdkVersion::NTuple{64, Cchar}
+    subCategories::NTuple{128,Cchar}
+    vendor::NTuple{64,Cchar}
+    version::NTuple{64,Cchar}
+    sdkVersion::NTuple{64,Cchar}
 end
 
 struct PClassInfoW
     cid::StaticString{16}
     cardinality::Int32
-    category::NTuple{32, Cchar}
-    name::NTuple{64, Int16}
+    category::NTuple{32,Cchar}
+    name::NTuple{64,Int16}
     classFlags::UInt32
-    subCategories::NTuple{128, Cchar}
-    vendor::NTuple{64, Int16}
-    version::NTuple{64, Int16}
-    sdkVersion::NTuple{64, Int16}
+    subCategories::NTuple{128,Cchar}
+    vendor::NTuple{64,Int16}
+    version::NTuple{64,Int16}
+    sdkVersion::NTuple{64,Int16}
 end
 
 struct BusInfo
@@ -546,7 +546,7 @@ struct LegacyMIDICCOutEvent
 end
 
 struct var""
-    data::NTuple{48, UInt8}
+    data::NTuple{48,UInt8}
 end
 
 function Base.getproperty(x::Ptr{var""}, f::Symbol)
@@ -571,26 +571,28 @@ function Base.getproperty(x::var"", f::Symbol)
     r = Ref{var""}(x)
     ptr = Base.unsafe_convert(Ptr{var""}, r)
     fptr = getproperty(ptr, f)
-    GC.@preserve r unsafeload(fptr)
+    return GC.@preserve r unsafeload(fptr)
 end
 
 function Base.setproperty!(x::Ptr{var""}, f::Symbol, v)
-    unsafestore!(getproperty(x, f), v)
+    return unsafestore!(getproperty(x, f), v)
 end
 
-function Base.propertynames(x::var"", private::Bool = false)
-    (:busIndex, :sampleOffset, :ppqPosition, :flags, :type, :Steinberg_Vst_Event_noteOn, :Steinberg_Vst_Event_noteOff, :Steinberg_Vst_Event_data, :Steinberg_Vst_Event_polyPressure, :Steinberg_Vst_Event_noteExpressionValue, :Steinberg_Vst_Event_noteExpressionText, :Steinberg_Vst_Event_chord, :Steinberg_Vst_Event_scale, :Steinberg_Vst_Event_midiCCOut, if private
+function Base.propertynames(x::var"", private::Bool=false)
+    return (
+        :busIndex, :sampleOffset, :ppqPosition, :flags, :type, :Steinberg_Vst_Event_noteOn, :Steinberg_Vst_Event_noteOff, :Steinberg_Vst_Event_data, :Steinberg_Vst_Event_polyPressure, :Steinberg_Vst_Event_noteExpressionValue, :Steinberg_Vst_Event_noteExpressionText, :Steinberg_Vst_Event_chord, :Steinberg_Vst_Event_scale, :Steinberg_Vst_Event_midiCCOut, if private
             fieldnames(typeof(x))
         else
             ()
-        end...)
+        end...,
+    )
 end
 
 struct RepresentationInfo
-    vendor::NTuple{64, Cchar}
-    name::NTuple{64, Cchar}
-    version::NTuple{64, Cchar}
-    host::NTuple{64, Cchar}
+    vendor::NTuple{64,Cchar}
+    name::NTuple{64,Cchar}
+    version::NTuple{64,Cchar}
+    host::NTuple{64,Cchar}
 end
 
 struct DataExchangeBlock
@@ -607,7 +609,7 @@ struct ProcessSetup
 end
 
 struct AudioBusBuffers
-    data::NTuple{24, UInt8}
+    data::NTuple{24,UInt8}
 end
 
 function Base.getproperty(x::Ptr{AudioBusBuffers}, f::Symbol)
@@ -622,19 +624,21 @@ function Base.getproperty(x::AudioBusBuffers, f::Symbol)
     r = Ref{AudioBusBuffers}(x)
     ptr = Base.unsafe_convert(Ptr{AudioBusBuffers}, r)
     fptr = getproperty(ptr, f)
-    GC.@preserve r unsafeload(fptr)
+    return GC.@preserve r unsafeload(fptr)
 end
 
 function Base.setproperty!(x::Ptr{AudioBusBuffers}, f::Symbol, v)
-    unsafestore!(getproperty(x, f), v)
+    return unsafestore!(getproperty(x, f), v)
 end
 
-function Base.propertynames(x::AudioBusBuffers, private::Bool = false)
-    (:numChannels, :silenceFlags, :Steinberg_Vst_AudioBusBuffers_channelBuffers32, :Steinberg_Vst_AudioBusBuffers_channelBuffers64, if private
+function Base.propertynames(x::AudioBusBuffers, private::Bool=false)
+    return (
+        :numChannels, :silenceFlags, :Steinberg_Vst_AudioBusBuffers_channelBuffers32, :Steinberg_Vst_AudioBusBuffers_channelBuffers64, if private
             fieldnames(typeof(x))
         else
             ()
-        end...)
+        end...,
+    )
 end
 
 struct IParameterChangesVtbl
@@ -1453,4 +1457,3 @@ struct IParamValueQueue
 end
 
 const SMTGCOMCOMPATIBLE = 0
-

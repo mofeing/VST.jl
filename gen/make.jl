@@ -1,6 +1,7 @@
 using Clang
 using Clang.Generators
 using MacroTools: postwalk
+using Runic
 
 clap_include_dir = joinpath(@__DIR__, "..", "external", "vst3_c_api")
 
@@ -144,3 +145,5 @@ cd(@__DIR__) do
 
     Clang.build!(ctx, Clang.BUILDSTAGE_PRINTING_ONLY)
 end
+
+Runic.format_file(joinpath(@__DIR__, "..", "src", "API.jl"); inplace=true)
