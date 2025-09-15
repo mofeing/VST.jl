@@ -47,40 +47,6 @@ type_replacements = Dict(
     :Steinberg_Vst_ParamValue => :Cdouble,
 )
 
-enum_joins = Dict(
-    :Steinberg_Vst_MediaType => :Int32,
-    :Steinberg_Vst_BusDirection => :Int32,
-    :Steinberg_Vst_BusType => :Int32,
-    :Steinberg_Vst_IoMode => :Int32,
-    :Steinberg_Vst_UnitID => :Int32,
-    :Steinberg_Vst_ParamValue => :Cdouble,
-    :Steinberg_Vst_ParamID => :UInt32,
-    :Steinberg_Vst_ProgramListID => :Int32,
-    :Steinberg_Vst_CtrlNumber => :Int16,
-    :Steinberg_Vst_TQuarterNotes => :Cdouble,
-    :Steinberg_Vst_TSamples => :Int64,
-    :Steinberg_Vst_ColorSpec => :UInt32,
-    :Steinberg_Vst_Sample32 => :Cfloat,
-    :Steinberg_Vst_Sample64 => :Cdouble,
-    :Steinberg_Vst_SampleRate => :Cdouble,
-    :Steinberg_Vst_SpeakerArrangement => :UInt64,
-    :Steinberg_Vst_Speaker => :UInt64,
-    :Steinberg_Vst_NoteExpressionTypeID => :UInt32,
-    :Steinberg_Vst_NoteExpressionValue => :Cdouble,
-    :Steinberg_Vst_KeyswitchTypeID => :UInt32,
-    :Steinberg_Vst_PhysicalUITypeID => :UInt32,
-    :Steinberg_Vst_KnobMode => :Int32,
-    :Steinberg_Vst_ChannelContext_ColorSpec => :UInt32,
-    :Steinberg_Vst_ChannelContext_ColorComponent => :UInt8,
-    :Steinberg_Vst_PrefetchableSupport => :UInt32,
-    :Steinberg_Vst_DataExchangeQueueID => :UInt32,
-    :Steinberg_Vst_DataExchangeBlockID => :UInt32,
-    :Steinberg_Vst_DataExchangeUserContextID => :UInt32,
-    :Steinberg_IPlugViewContentScaleSupport_ScaleFactor => :Cfloat,
-    :Steinberg_Vst_IAttributeList_AttrID => :Cstring,
-    :Steinberg_Vst_IProgress_ID => :UInt64,
-)
-
 cd(@__DIR__) do
     Clang.build!(ctx, Clang.BUILDSTAGE_NO_PRINTING)
 
