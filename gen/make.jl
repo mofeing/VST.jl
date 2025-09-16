@@ -74,11 +74,31 @@ cd(@__DIR__) do
 
         for orig_expr in orig_exprs
             expr = orig_expr
+            Base.remove_linenums!(expr)
 
             # remove garbage intermediate types
             expr = postwalk(expr) do sym
                 sym isa Symbol || return sym
                 get(type_replacements, sym, sym)
+            end
+
+            # remove virtual table boilerplate
+            if Base.isexpr(expr, :struct)
+                # remove `Vtbl` suffix
+                expr.args[2] = chopsuffix(string(expr.args[2]), "Vtbl") |> Symbol
+
+                # replace inherited methods from FUnknown class for composed FUnknown
+                funknown_methods = [
+                    :(queryInterface::Ptr{Cvoid}),
+                    :(addRef::Ptr{Cvoid}),
+                    :(release::Ptr{Cvoid}),
+                ]
+                fields = expr.args[3]
+                @info "" string(expr.args[2]) fields
+                if endswith(string(expr.args[2]), "FUnknown") && funknown_methods ⊆ fields.args
+                    setdiff!(fields.args, funknown_methods)
+                    pushfirst!(fields.args, :(funknown::FUnknown))
+                end
             end
 
             # format enum & type names to PascalCase
