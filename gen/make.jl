@@ -85,7 +85,7 @@ cd(@__DIR__) do
             # remove virtual table boilerplate
             if Base.isexpr(expr, :struct)
                 # remove `Vtbl` suffix
-                expr.args[2] = chopsuffix(string(expr.args[2]), "Vtbl") |> Symbol
+                # expr.args[2] = chopsuffix(string(expr.args[2]), "Vtbl") |> Symbol
 
                 # replace inherited methods from FUnknown class for composed FUnknown
                 funknown_methods = [
