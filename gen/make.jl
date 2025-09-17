@@ -103,11 +103,11 @@ cd(@__DIR__) do
                 # process in reverse so that `pushfirst!` leaves the fields in the correct order
                 if !endswith(string(expr.args[2]), "IPluginBaseVtbl") && ipluginbase_methods ⊆ fields.args
                     setdiff!(fields.args, ipluginbase_methods)
-                    pushfirst!(fields.args, :(ipluginbase::IPluginBase))
+                    pushfirst!(fields.args, :(ipluginbase::IPluginBaseVtbl))
                 end
                 if !endswith(string(expr.args[2]), "FUnknownVtbl") && funknown_methods ⊆ fields.args
                     setdiff!(fields.args, funknown_methods)
-                    pushfirst!(fields.args, :(funknown::FUnknown))
+                    pushfirst!(fields.args, :(funknown::FUnknownVtbl))
                 end
             end
 
