@@ -638,7 +638,9 @@ function Base.propertynames(x::AudioBusBuffers, private::Bool = false)
 end
 
 struct IParameterChangesVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getParameterCount::Ptr{Cvoid}
     getParameterData::Ptr{Cvoid}
     addParameterData::Ptr{Cvoid}
@@ -649,7 +651,9 @@ struct IParameterChanges
 end
 
 struct IEventListVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getEventCount::Ptr{Cvoid}
     getEvent::Ptr{Cvoid}
     addEvent::Ptr{Cvoid}
@@ -698,7 +702,9 @@ struct FUnknown
 end
 
 struct IPlugViewContentScaleSupportVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setContentScaleFactor::Ptr{Cvoid}
 end
 
@@ -707,7 +713,9 @@ struct IPlugViewContentScaleSupport
 end
 
 struct IPlugViewVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     isPlatformTypeSupported::Ptr{Cvoid}
     attached::Ptr{Cvoid}
     removed::Ptr{Cvoid}
@@ -727,7 +735,9 @@ struct IPlugView
 end
 
 struct IPlugFrameVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     resizeView::Ptr{Cvoid}
 end
 
@@ -736,7 +746,9 @@ struct IPlugFrame
 end
 
 struct IBStreamVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     read::Ptr{Cvoid}
     write::Ptr{Cvoid}
     seek::Ptr{Cvoid}
@@ -748,7 +760,9 @@ struct IBStream
 end
 
 struct ISizeableStreamVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getStreamSize::Ptr{Cvoid}
     setStreamSize::Ptr{Cvoid}
 end
@@ -758,7 +772,9 @@ struct ISizeableStream
 end
 
 struct INoteExpressionControllerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getNoteExpressionCount::Ptr{Cvoid}
     getNoteExpressionInfo::Ptr{Cvoid}
     getNoteExpressionStringByValue::Ptr{Cvoid}
@@ -770,7 +786,9 @@ struct INoteExpressionController
 end
 
 struct IKeyswitchControllerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getKeyswitchCount::Ptr{Cvoid}
     getKeyswitchInfo::Ptr{Cvoid}
 end
@@ -780,7 +798,9 @@ struct IKeyswitchController
 end
 
 struct INoteExpressionPhysicalUIMappingVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getPhysicalUIMapping::Ptr{Cvoid}
 end
 
@@ -789,7 +809,9 @@ struct INoteExpressionPhysicalUIMapping
 end
 
 struct IPluginBaseVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     initialize::Ptr{Cvoid}
     terminate::Ptr{Cvoid}
 end
@@ -799,7 +821,9 @@ struct IPluginBase
 end
 
 struct IPluginFactoryVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getFactoryInfo::Ptr{Cvoid}
     countClasses::Ptr{Cvoid}
     getClassInfo::Ptr{Cvoid}
@@ -811,7 +835,9 @@ struct IPluginFactory
 end
 
 struct IPluginFactory2Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getFactoryInfo::Ptr{Cvoid}
     countClasses::Ptr{Cvoid}
     getClassInfo::Ptr{Cvoid}
@@ -824,7 +850,9 @@ struct IPluginFactory2
 end
 
 struct IPluginFactory3Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getFactoryInfo::Ptr{Cvoid}
     countClasses::Ptr{Cvoid}
     getClassInfo::Ptr{Cvoid}
@@ -839,8 +867,11 @@ struct IPluginFactory3
 end
 
 struct IComponentVtbl
-    funknown::FUnknownVtbl
-    ipluginbase::IPluginBaseVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
+    initialize::Ptr{Cvoid}
+    terminate::Ptr{Cvoid}
     getControllerClassId::Ptr{Cvoid}
     setIoMode::Ptr{Cvoid}
     getBusCount::Ptr{Cvoid}
@@ -857,7 +888,9 @@ struct IComponent
 end
 
 struct IAttributeListVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setInt::Ptr{Cvoid}
     getInt::Ptr{Cvoid}
     setFloat::Ptr{Cvoid}
@@ -873,7 +906,9 @@ struct IAttributeList
 end
 
 struct IStreamAttributesVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getFileName::Ptr{Cvoid}
     getAttributes::Ptr{Cvoid}
 end
@@ -883,7 +918,9 @@ struct IStreamAttributes
 end
 
 struct IRemapParamIDVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getCompatibleParamID::Ptr{Cvoid}
 end
 
@@ -892,7 +929,9 @@ struct IRemapParamID
 end
 
 struct IComponentHandlerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     beginEdit::Ptr{Cvoid}
     performEdit::Ptr{Cvoid}
     endEdit::Ptr{Cvoid}
@@ -904,7 +943,9 @@ struct IComponentHandler
 end
 
 struct IComponentHandler2Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setDirty::Ptr{Cvoid}
     requestOpenEditor::Ptr{Cvoid}
     startGroupEdit::Ptr{Cvoid}
@@ -916,7 +957,9 @@ struct IComponentHandler2
 end
 
 struct IComponentHandlerBusActivationVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     requestBusActivation::Ptr{Cvoid}
 end
 
@@ -925,7 +968,9 @@ struct IComponentHandlerBusActivation
 end
 
 struct IProgressVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     start::Ptr{Cvoid}
     update::Ptr{Cvoid}
     finish::Ptr{Cvoid}
@@ -936,8 +981,11 @@ struct IProgress
 end
 
 struct IEditControllerVtbl
-    funknown::FUnknownVtbl
-    ipluginbase::IPluginBaseVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
+    initialize::Ptr{Cvoid}
+    terminate::Ptr{Cvoid}
     setComponentState::Ptr{Cvoid}
     setState::Ptr{Cvoid}
     getState::Ptr{Cvoid}
@@ -958,7 +1006,9 @@ struct IEditController
 end
 
 struct IEditController2Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setKnobMode::Ptr{Cvoid}
     openHelp::Ptr{Cvoid}
     openAboutBox::Ptr{Cvoid}
@@ -969,7 +1019,9 @@ struct IEditController2
 end
 
 struct IMidiMappingVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getMidiControllerAssignment::Ptr{Cvoid}
 end
 
@@ -978,7 +1030,9 @@ struct IMidiMapping
 end
 
 struct IEditControllerHostEditingVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     beginEditFromHost::Ptr{Cvoid}
     endEditFromHost::Ptr{Cvoid}
 end
@@ -988,7 +1042,9 @@ struct IEditControllerHostEditing
 end
 
 struct IComponentHandlerSystemTimeVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getSystemTime::Ptr{Cvoid}
 end
 
@@ -997,7 +1053,9 @@ struct IComponentHandlerSystemTime
 end
 
 struct IMessageVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getMessageID::Ptr{Cvoid}
     setMessageID::Ptr{Cvoid}
     getAttributes::Ptr{Cvoid}
@@ -1008,7 +1066,9 @@ struct IMessage
 end
 
 struct IConnectionPointVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     connect::Ptr{Cvoid}
     disconnect::Ptr{Cvoid}
     notify::Ptr{Cvoid}
@@ -1019,7 +1079,9 @@ struct IConnectionPoint
 end
 
 struct IXmlRepresentationControllerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getXmlRepresentationStream::Ptr{Cvoid}
 end
 
@@ -1028,7 +1090,9 @@ struct IXmlRepresentationController
 end
 
 struct IComponentHandler3Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     createContextMenu::Ptr{Cvoid}
 end
 
@@ -1037,7 +1101,9 @@ struct IComponentHandler3
 end
 
 struct IContextMenuTargetVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     executeMenuItem::Ptr{Cvoid}
 end
 
@@ -1046,7 +1112,9 @@ struct IContextMenuTarget
 end
 
 struct IContextMenuVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getItemCount::Ptr{Cvoid}
     getItem::Ptr{Cvoid}
     addItem::Ptr{Cvoid}
@@ -1059,7 +1127,9 @@ struct IContextMenu
 end
 
 struct IMidiLearnVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     onLiveMIDIControllerInput::Ptr{Cvoid}
 end
 
@@ -1068,7 +1138,9 @@ struct IMidiLearn
 end
 
 struct ChannelContextIInfoListenerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setChannelContextInfos::Ptr{Cvoid}
 end
 
@@ -1077,7 +1149,9 @@ struct ChannelContextIInfoListener
 end
 
 struct IPrefetchableSupportVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getPrefetchableSupport::Ptr{Cvoid}
 end
 
@@ -1086,7 +1160,9 @@ struct IPrefetchableSupport
 end
 
 struct IDataExchangeHandlerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     openQueue::Ptr{Cvoid}
     closeQueue::Ptr{Cvoid}
     lockBlock::Ptr{Cvoid}
@@ -1098,7 +1174,9 @@ struct IDataExchangeHandler
 end
 
 struct IDataExchangeReceiverVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     queueOpened::Ptr{Cvoid}
     queueClosed::Ptr{Cvoid}
     onDataExchangeBlocksReceived::Ptr{Cvoid}
@@ -1109,7 +1187,9 @@ struct IDataExchangeReceiver
 end
 
 struct IAutomationStateVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setAutomationState::Ptr{Cvoid}
 end
 
@@ -1118,7 +1198,9 @@ struct IAutomationState
 end
 
 struct IInterAppAudioHostVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getScreenSize::Ptr{Cvoid}
     connectedToHost::Ptr{Cvoid}
     switchToHost::Ptr{Cvoid}
@@ -1134,7 +1216,9 @@ struct IInterAppAudioHost
 end
 
 struct IInterAppAudioConnectionNotificationVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     onInterAppAudioConnectionStateChange::Ptr{Cvoid}
 end
 
@@ -1143,7 +1227,9 @@ struct IInterAppAudioConnectionNotification
 end
 
 struct IInterAppAudioPresetManagerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     runLoadPresetBrowser::Ptr{Cvoid}
     runSavePresetBrowser::Ptr{Cvoid}
     loadNextPreset::Ptr{Cvoid}
@@ -1155,7 +1241,9 @@ struct IInterAppAudioPresetManager
 end
 
 struct IAudioProcessorVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setBusArrangements::Ptr{Cvoid}
     getBusArrangement::Ptr{Cvoid}
     canProcessSampleSize::Ptr{Cvoid}
@@ -1171,7 +1259,9 @@ struct IAudioProcessor
 end
 
 struct IAudioPresentationLatencyVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     setAudioPresentationLatencySamples::Ptr{Cvoid}
 end
 
@@ -1180,7 +1270,9 @@ struct IAudioPresentationLatency
 end
 
 struct IProcessContextRequirementsVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getProcessContextRequirements::Ptr{Cvoid}
 end
 
@@ -1189,7 +1281,9 @@ struct IProcessContextRequirements
 end
 
 struct IHostApplicationVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getName::Ptr{Cvoid}
     createInstance::Ptr{Cvoid}
 end
@@ -1199,7 +1293,9 @@ struct IHostApplication
 end
 
 struct IVst3ToVst2WrapperVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
 end
 
 struct IVst3ToVst2Wrapper
@@ -1207,7 +1303,9 @@ struct IVst3ToVst2Wrapper
 end
 
 struct IVst3ToAUWrapperVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
 end
 
 struct IVst3ToAUWrapper
@@ -1215,7 +1313,9 @@ struct IVst3ToAUWrapper
 end
 
 struct IVst3ToAAXWrapperVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
 end
 
 struct IVst3ToAAXWrapper
@@ -1223,7 +1323,9 @@ struct IVst3ToAAXWrapper
 end
 
 struct IVst3WrapperMPESupportVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     enableMPEInputProcessing::Ptr{Cvoid}
     setMPEInputDeviceSettings::Ptr{Cvoid}
 end
@@ -1233,7 +1335,9 @@ struct IVst3WrapperMPESupport
 end
 
 struct IParameterFinderVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     findParameter::Ptr{Cvoid}
 end
 
@@ -1242,7 +1346,9 @@ struct IParameterFinder
 end
 
 struct IUnitHandlerVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     notifyUnitSelection::Ptr{Cvoid}
     notifyProgramListChange::Ptr{Cvoid}
 end
@@ -1252,7 +1358,9 @@ struct IUnitHandler
 end
 
 struct IUnitHandler2Vtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     notifyUnitByBusChange::Ptr{Cvoid}
 end
 
@@ -1261,7 +1369,9 @@ struct IUnitHandler2
 end
 
 struct IUnitInfoVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getUnitCount::Ptr{Cvoid}
     getUnitInfo::Ptr{Cvoid}
     getProgramListCount::Ptr{Cvoid}
@@ -1281,7 +1391,9 @@ struct IUnitInfo
 end
 
 struct IProgramListDataVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     programDataSupported::Ptr{Cvoid}
     getProgramData::Ptr{Cvoid}
     setProgramData::Ptr{Cvoid}
@@ -1292,7 +1404,9 @@ struct IProgramListData
 end
 
 struct IUnitDataVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     unitDataSupported::Ptr{Cvoid}
     getUnitData::Ptr{Cvoid}
     setUnitData::Ptr{Cvoid}
@@ -1303,7 +1417,9 @@ struct IUnitData
 end
 
 struct IPlugInterfaceSupportVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     isPlugInterfaceSupported::Ptr{Cvoid}
 end
 
@@ -1312,7 +1428,9 @@ struct IPlugInterfaceSupport
 end
 
 struct IParameterFunctionNameVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getParameterIDFromFunctionName::Ptr{Cvoid}
 end
 
@@ -1321,7 +1439,9 @@ struct IParameterFunctionName
 end
 
 struct IParamValueQueueVtbl
-    funknown::FUnknownVtbl
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
     getParameterId::Ptr{Cvoid}
     getPointCount::Ptr{Cvoid}
     getPoint::Ptr{Cvoid}

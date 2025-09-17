@@ -24,7 +24,7 @@ type_replacements = Dict(
     :Steinberg_int64 => :Int64,
     :Steinberg_uint64 => :UInt64,
     :Steinberg_TSize => :Int64,
-    :Steinberg_tresult => :Int32,
+    :Steinberg_tresult => :Cint,
     :Steinberg_TPtrInt => :UInt64,
     :Steinberg_TBool => :UInt8,
     :Steinberg_char8 => :Cchar,
@@ -83,33 +83,33 @@ cd(@__DIR__) do
             end
 
             # remove virtual table boilerplate
-            if Base.isexpr(expr, :struct)
-                # remove `Vtbl` suffix
-                # expr.args[2] = chopsuffix(string(expr.args[2]), "Vtbl") |> Symbol
+            # if Base.isexpr(expr, :struct)
+            #     # remove `Vtbl` suffix
+            #     # expr.args[2] = chopsuffix(string(expr.args[2]), "Vtbl") |> Symbol
 
-                # replace inherited methods from FUnknown class for composed FUnknown
-                funknown_methods = [
-                    :(queryInterface::Ptr{Cvoid}),
-                    :(addRef::Ptr{Cvoid}),
-                    :(release::Ptr{Cvoid}),
-                ]
-                ipluginbase_methods = [
-                    :(initialize::Ptr{Cvoid}),
-                    :(terminate::Ptr{Cvoid}),
-                ]
+            #     # replace inherited methods from FUnknown class for composed FUnknown
+            #     funknown_methods = [
+            #         :(queryInterface::Ptr{Cvoid}),
+            #         :(addRef::Ptr{Cvoid}),
+            #         :(release::Ptr{Cvoid}),
+            #     ]
+            #     ipluginbase_methods = [
+            #         :(initialize::Ptr{Cvoid}),
+            #         :(terminate::Ptr{Cvoid}),
+            #     ]
 
-                fields = expr.args[3]
+            #     fields = expr.args[3]
 
-                # process in reverse so that `pushfirst!` leaves the fields in the correct order
-                if !endswith(string(expr.args[2]), "IPluginBaseVtbl") && ipluginbase_methods ⊆ fields.args
-                    setdiff!(fields.args, ipluginbase_methods)
-                    pushfirst!(fields.args, :(ipluginbase::IPluginBaseVtbl))
-                end
-                if !endswith(string(expr.args[2]), "FUnknownVtbl") && funknown_methods ⊆ fields.args
-                    setdiff!(fields.args, funknown_methods)
-                    pushfirst!(fields.args, :(funknown::FUnknownVtbl))
-                end
-            end
+            #     # process in reverse so that `pushfirst!` leaves the fields in the correct order
+            #     if !endswith(string(expr.args[2]), "IPluginBaseVtbl") && ipluginbase_methods ⊆ fields.args
+            #         setdiff!(fields.args, ipluginbase_methods)
+            #         pushfirst!(fields.args, :(ipluginbase::IPluginBaseVtbl))
+            #     end
+            #     if !endswith(string(expr.args[2]), "FUnknownVtbl") && funknown_methods ⊆ fields.args
+            #         setdiff!(fields.args, funknown_methods)
+            #         pushfirst!(fields.args, :(funknown::FUnknownVtbl))
+            #     end
+            # end
 
             # format enum & type names to PascalCase
             expr = postwalk(expr) do sym
