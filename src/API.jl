@@ -541,11 +541,11 @@ struct LegacyMIDICCOutEvent
     value2::Cchar
 end
 
-struct var""
+struct Event
     data::NTuple{48, UInt8}
 end
 
-function Base.getproperty(x::Ptr{var""}, f::Symbol)
+function Base.getproperty(x::Ptr{Event}, f::Symbol)
     f === :busIndex && return Ptr{Int32}(x + 0)
     f === :sampleOffset && return Ptr{Int32}(x + 4)
     f === :ppqPosition && return Ptr{TQuarterNotes}(x + 8)
@@ -563,18 +563,18 @@ function Base.getproperty(x::Ptr{var""}, f::Symbol)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"", f::Symbol)
-    r = Ref{var""}(x)
-    ptr = Base.unsafe_convert(Ptr{var""}, r)
+function Base.getproperty(x::Event, f::Symbol)
+    r = Ref{Event}(x)
+    ptr = Base.unsafe_convert(Ptr{Event}, r)
     fptr = getproperty(ptr, f)
     return GC.@preserve r unsafeload(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var""}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{Event}, f::Symbol, v)
     return unsafestore!(getproperty(x, f), v)
 end
 
-function Base.propertynames(x::var"", private::Bool = false)
+function Base.propertynames(x::Event, private::Bool = false)
     return (
         :busIndex, :sampleOffset, :ppqPosition, :flags, :type, :Steinberg_Vst_Event_noteOn, :Steinberg_Vst_Event_noteOff, :Steinberg_Vst_Event_data, :Steinberg_Vst_Event_polyPressure, :Steinberg_Vst_Event_noteExpressionValue, :Steinberg_Vst_Event_noteExpressionText, :Steinberg_Vst_Event_chord, :Steinberg_Vst_Event_scale, :Steinberg_Vst_Event_midiCCOut, if private
             fieldnames(typeof(x))

@@ -121,7 +121,7 @@ cd(@__DIR__) do
             # TODO revise this is ok (add a check)
             expr = postwalk(expr) do sym
                 sym isa Symbol || return sym
-                chopprefix(string(sym), "Event") |> Symbol
+                replace(string(sym), "EventEvent" => "Event") |> Symbol
             end
 
             # apply changes
