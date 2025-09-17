@@ -688,7 +688,9 @@ struct ProgramListInfo
 end
 
 struct FUnknownVtbl
-    funknown::FUnknown
+    queryInterface::Ptr{Cvoid}
+    addRef::Ptr{Cvoid}
+    release::Ptr{Cvoid}
 end
 
 struct FUnknown
@@ -788,7 +790,8 @@ end
 
 struct IPluginBaseVtbl
     funknown::FUnknown
-    ipluginbase::IPluginBase
+    initialize::Ptr{Cvoid}
+    terminate::Ptr{Cvoid}
 end
 
 struct IPluginBase
