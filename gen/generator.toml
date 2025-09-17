@@ -54,6 +54,7 @@ output_ignorelist = [
     "Steinberg_Vst_KnobMode",
     "Steinberg_Vst_PrefetchableSupport",
 ]
+struct_field_count_assert = false
 
 [codegen]
 use_julia_bool = true

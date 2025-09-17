@@ -93,9 +93,19 @@ cd(@__DIR__) do
                     :(addRef::Ptr{Cvoid}),
                     :(release::Ptr{Cvoid}),
                 ]
+                ipluginbase_methods = [
+                    :(initialize::Ptr{Cvoid}),
+                    :(terminate::Ptr{Cvoid}),
+                ]
+
                 fields = expr.args[3]
-                @info "" string(expr.args[2]) fields
-                if endswith(string(expr.args[2]), "FUnknown") && funknown_methods ⊆ fields.args
+
+                # process in reverse so that `pushfirst!` leaves the fields in the correct order
+                if !endswith(string(expr.args[2]), "IPluginBase") && ipluginbase_methods ⊆ fields.args
+                    setdiff!(fields.args, ipluginbase_methods)
+                    pushfirst!(fields.args, :(ipluginbase::IPluginBase))
+                end
+                if !endswith(string(expr.args[2]), "FUnknown") && funknown_methods ⊆ fields.args
                     setdiff!(fields.args, funknown_methods)
                     pushfirst!(fields.args, :(funknown::FUnknown))
                 end
