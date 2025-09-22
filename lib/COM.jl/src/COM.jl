@@ -56,7 +56,7 @@ macro interface(name, _iid, _methods)
     end)
 
     quote
-        $abstype_expr
+        $Core.@__doc__ $abstype_expr
         $vtable_expr
         $COM.iid(::$Type{$(esc(name))}) = $_iid
         $COM.interface_type(::$Type{$(esc(vtable_sym))}) = $(esc(name))
