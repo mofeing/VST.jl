@@ -1,6 +1,6 @@
 module COM
 
-export @interface, iid, IUnknown
+export @interface, @coclass, iid, IUnknown
 
 """
     iid(::Type)
@@ -70,6 +70,45 @@ end
     query_interface
     add_ref
     release
+end
+
+"""
+    @coclass name <: Interface1[, Interface2, ...] begin
+        field1::Type1
+        field2::Type2
+        ...
+    end
+
+Define a COM coclass (i.e. component class) `name` that implements the specified interfaces and has the given fields.
+"""
+macro coclass(class, fields)
+    Meta.isexpr(class, :<:) || error("@coclass must inherit from at least one interface")
+    Meta.isexpr(fields, :block) || error("fields must be a block")
+
+    name = class.args[1]
+    fields = fields.args
+
+    interfaces = if Meta.isexpr(class.args[2], :tuple)
+        class.args[2].args
+    else
+        [class.args[2]]
+    end
+    vtable_exprs = map(interfaces) do iface
+        Expr(
+            :(::),
+            # left = field name
+            Symbol(:vtable_, iface),
+            # right = field type (requires evaluation)
+            Expr(:$, Expr(:call, COM.vtable_type, iface)),
+        )
+    end
+
+    return quote
+        @eval struct $name
+            $(vtable_exprs...)
+            $(fields...)
+        end
+    end
 end
 
 end
