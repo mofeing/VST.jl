@@ -51,11 +51,13 @@ macro interface(name, _iid, _methods)
         end
     end
 
-    vtable_expr = :(struct $(esc(vtable_sym))
-        $(_methodlist...)
-    end)
+    vtable_expr = :(
+        struct $(esc(vtable_sym))
+            $(_methodlist...)
+        end
+    )
 
-    quote
+    return quote
         $Core.@__doc__ $abstype_expr
         $vtable_expr
         $COM.iid(::$Type{$(esc(name))}) = $_iid
