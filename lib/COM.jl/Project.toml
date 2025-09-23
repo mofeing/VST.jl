@@ -2,9 +2,3 @@ name = "COM"
 uuid = "bb8bd35d-e6a8-4b65-8ce0-21eac64da7e9"
 version = "0.1.0"
 authors = ["Sergio Sánchez Ramírez <15837247+mofeing@users.noreply.github.com>"]
-
-[deps]
-Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
-
-[compat]
-Libdl = "1.11.0"
