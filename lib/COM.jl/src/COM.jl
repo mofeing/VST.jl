@@ -30,6 +30,7 @@ Get the list of interfaces implemented by a coclass type.
 """
 function interfaces end
 
+# TODO is this okay? should there be just one vtable entry or one per interface?
 """
     getvtable(::Type{Interface}, obj::CoClass) where {Interface, CoClass}
 
@@ -110,30 +111,44 @@ macro coclass(class, fields)
     Meta.isexpr(fields, :block) || error("fields must be a block")
 
     name = class.args[1]
-    fields = fields.args
+    data_fields = fields.args
 
     interfaces = if Meta.isexpr(class.args[2], :tuple)
         class.args[2].args
     else
         [class.args[2]]
     end
-    vtable_exprs = map(interfaces) do iface
+    vtable_fields = map(interfaces) do iface
         Expr(
             :(::),
             # left = field name
             Symbol(:vtable_, iface),
             # right = field type (requires evaluation)
-            Expr(:$, Expr(:call, COM.vtable_type, iface)),
+            Expr(:curly, Ptr, Expr(:$, Expr(:call, COM.vtable_type, iface))),
         )
     end
 
+    # TODO should we use Ptr or RefValue?
+    vtable_ptrs = map(interfaces) do iface
+        vtable_type = Meta.quot(:(COM.vtable_type($iface)))
+        quote
+            const $(esc(Symbol("vtable#", iface, "#", name)))::Ptr{eval($vtable_type)} = Ptr{eval($vtable_type)}(C_NULL)
+            # const $(esc(Symbol("vtable#", iface, "#", name)))::$(Base.RefValue){eval($vtable_type)} = $(Base.RefValue){eval($vtable_type)}()
+        end
+    end
+
+    # TODO how do we initialize vtable pointers?
     return quote
         @eval struct $name
-            $(vtable_exprs...)
-            $(fields...)
+            $(vtable_fields...)
+            $(data_fields...)
+
+            function $name(args...)
+                return new($([Symbol("vtable#", iface, "#", name) for iface in interfaces]...), args...)
+            end
         end
 
-        # TODO generated constructor that initializes vtable fields
+        $(vtable_ptrs...)
 
         $COM.interfaces(::Type{$(esc(name))}) = ($(interfaces...),)
         $COM.interfaces(::$(esc(name))) = interfaces($(esc(name)))
