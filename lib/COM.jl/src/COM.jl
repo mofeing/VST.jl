@@ -42,7 +42,7 @@ macro interface(name, _iid, _methods)
 
     abstype_expr = :(abstract type $name end)
 
-    vtable_sym = Symbol(name, "Vtbl")
+    vtable_sym = Symbol(name, "VTable")
 
     _methodlist = let _methods = copy(_methods)
         Base.remove_linenums!(_methods)
