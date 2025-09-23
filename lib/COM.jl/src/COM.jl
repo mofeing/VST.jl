@@ -140,4 +140,9 @@ macro coclass(class, fields)
     end
 end
 
+# TODO in order to get function pointers of methods on itself... to be used for filling vtable fields
+# using Libdl
+# const RTLD_SELF = Ptr{Cvoid}(-2)
+# dlsym(RTLD_SELF, :puts)
+
 end
