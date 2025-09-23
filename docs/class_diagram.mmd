@@ -1,0 +1,599 @@
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+
+classDiagram
+  namespace core {
+    class IUnknown
+    class IBStream
+    class ICloneable
+    class IErrorContext
+    class IPersistent
+    class IPluginBase
+    class IPluginFactory
+    class IPluginFactory2
+    class IPluginFactory3
+    class IStringResult
+    class IString
+    class IUpdateHandler
+    class IDependent
+  }
+
+  namespace GUI {
+    class IPlugView
+    class IPlugFrame
+    class IPlugViewContentScaleSupport
+  }
+
+  namespace VST {
+    class IAttributeList
+    class IStreamAttributes
+    class IAttributeList
+    class IStreamAttributes
+    class IAudioProcessor
+    class IAudioPresentationLatency
+    class IProcessContextRequirements
+    class IAutomationState
+    class IInfoListener
+    class IComponent
+    class IComponentHandler3
+    class IContextMenuTarget
+    class IContextMenu
+    class IComponentHandler
+    class IEditController
+    class IEditController2
+    class IMidiMapping
+    class IComponentHandlerBusActivation
+    class IEditControllerHostEditing
+    class IProgress
+    class IEventList
+    class IHostApplication
+    class IMessage
+    class IConnectionPoint
+    class IMidiLearn
+    class INoteExpressionController
+    class IKeyswitchController
+    class IParamValueQueue
+    class IParameterChanges
+    class IParameterFunctionName
+    class INoteExpressionPhysicalUIMapping
+    class IPlugInterfaceSupport
+    class IParameterFinder
+    class IPrefetchableSupport
+    class IXmlRepresentationController
+    class IUnitHandler
+    class IUnitHandler2
+    class IUnitInfo
+    class IProgramListData
+    class IUnitData
+  }
+
+  class IUnknown {
+    <<interface>>
+    + query_interface()*
+    + add_ref()*
+    + release()*
+  }
+  note for IUnknown "a.k.a. FUnknown"
+  %% note for IUnknown "UUID(0x00000000_0000_0000_C000_000000000046)"
+
+  class IBStream {
+    <<interface>>
+    + read()*
+    + write()*
+    + seek()*
+    + tell()*
+  }
+  IUnknown <|-- IBStream
+  %% note for IBStream "UUID(0xC3BF6EA2_3099_4752_9B6B_F9901EE33E9B)"
+
+  class ISizeableStream {
+    <<interface>>
+    + get_stream_size()*
+    + set_stream_size()*
+  }
+  IUnknown <|-- ISizeableStream
+  %% note for ISizeableStream "UUID(0x04F9549E_E02F4E6E_87E86A87_47F4E17F)"
+
+  class ICloneable {
+    <<interface>>
+    + clone()*
+  }
+  IUnknown <|-- ICloneable
+  %% note for ICloneable "UUID(0xD45406B9_3A2D_4443_9DAD_9BA985A1454B)"
+
+  class IErrorContext {
+    <<interface>>
+    + disable_error_ui()*
+    + error_message_shown()*
+    + get_error_message()*
+  }
+  IUnknown <|-- IErrorContext
+  %% note for IErrorContext "UUID(0x12BCD07B_7C69_4336_B7DA_77C3444A0CD0)"
+
+  class IPersistent {
+    <<interface>>
+    + get_class_id()*
+    + save_attributes()*
+    + load_attributes()*
+  }
+  IUnknown <|-- IPersistent
+  %% note for IPersistent "UUID(0xBA1A4637_3C9F46D0_A65DBA0E_B85DA829)"
+
+  class IAttributes {
+    <<interface>>
+    + set()*
+    + queue()*
+    + set_binary_data()*
+    + get()*
+    + unqueue()*
+    + get_queue_item_count()*
+    + reset_queue()*
+    + get_binary_data()*
+    + get_binary_data_size()*
+  }
+  IUnknown <|-- IAttributes
+  %% note for IAttributes "UUID(0xFA1E32F9_CA6D46F5_A982F956_B1191B58)"
+
+  class IAttributes2 {
+    <<interface>>
+    + count_attributes()*
+    + get_attribute_id()*
+  }
+  IAttributes <|-- IAttributes2
+  %% note for IAttributes2 "UUID(0x1382126A_FECA4871_97D52A45_B042AE99)"
+
+  class IPluginBase {
+    <<interface>>
+    + initialize()*
+    + terminate()*
+  }
+  IUnknown <|-- IPluginBase
+  %% note for IPluginBase "UUID(0x22888DDB_156E_45AE_8358_B34808190625)"
+
+  class IPluginFactory {
+    <<interface>>
+    + get_factory_info()*
+    + count_classes()*
+    + get_class_info()*
+    + create_instance()*
+  }
+  IUnknown <|-- IPluginFactory
+  %% note for IPluginFactory "UUID(0x7A4D811C_5211_4A1F_AED9_D2EE0B43BF9F)"
+
+  class IPluginFactory2 {
+    <<interface>>
+    + get_class_info_2()*
+  }
+  IPluginFactory <|-- IPluginFactory2
+  %% note for IPluginFactory2 "UUID(0x0007B650_F24B_4C0B_A464_EDB9F00B2ABB)"
+
+  class IPluginFactory3 {
+    <<interface>>
+    + get_class_info_unicode()*
+    + set_host_context()*
+  }
+  IPluginFactory2 <|-- IPluginFactory3
+  %% note for IPluginFactory3 "UUID(0x4555A2AB_C123_4E57_9B12_291036878931)"
+
+  class IPluginCompatibility {
+    <<interface>>
+    + get_compatibility_json()*
+  }
+  IUnknown <|-- IPluginCompatibility
+  %% note for IPluginCompatibility "UUID(0x4AFD4B6A_35D7C240_A5C31414_FB7D15E6)"
+
+  class IStringResult {
+    <<interface>>
+    + set_text()*
+  }
+  IUnknown <|-- IStringResult
+  %% note for IStringResult "UUID(0x550798BC_8720_49DB_8492_0A153B50B7A8)"
+
+  class IString {
+    <<interface>>
+    + set_text8()*
+    + set_text16()*
+    + get_text8()*
+    + get_text16()*
+    + take()*
+    + is_wide_string()*
+  }
+  IUnknown <|-- IString
+  %% note for IString "UUID(0xF99DB7A3_0FC1_4821_800B_0CF98E348EDF)"
+
+  class IUpdateHandler {
+    <<interface>>
+    + add_dependent()*
+    + remove_dependent()*
+    + trigger_updates()*
+    + defer_updates()*
+  }
+  IUnknown <|-- IUpdateHandler
+  %% note for IUpdateHandler "UUID(0xF5246D56_8654_4d60_B026_AFB57B697B37)"
+
+  class IDependent {
+    <<interface>>
+    + update()*
+  }
+  IUnknown <|-- IDependent
+  %% note for IDependent "UUID(0xF52B7AAE_DE72_416d_8AF1_8ACE9DD7BD5E)"
+
+  class IPlugView {
+    <<interface>>
+    + is_platform_type_supported()*
+    + attached()*
+    + removed()*
+    + on_wheel()*
+    + on_key_down()*
+    + on_key_up()*
+    + get_size()*
+    + on_size()*
+    + on_focus()*
+    + set_frame()*
+    + can_resize()*
+    + check_size_constraint()*
+  }
+  IUnknown <|-- IPlugView
+  %% note for IPlugView "UUID(0x5BC32507_D060_49EA_A615_1B522B755B29)"
+
+  class IPlugFrame {
+    <<interface>>
+    + resize_view()*
+  }
+  IUnknown <|-- IPlugFrame
+  %% note for IPlugFrame "UUID(0x367FAF01_AFA9_4693_8D4D_A2A0ED0882A3)"
+
+  class IPlugViewContentScaleSupport {
+    <<interface>>
+    + set_content_scale_factor()*
+  }
+  IUnknown <|-- IPlugViewContentScaleSupport
+  %% note for IPlugViewContentScaleSupport "UUID(0x65ED9690_8AC4_4525_8AAD_EF7A72EA703F)"
+
+  class IAttributeList {
+    <<interface>>
+    + set_int()*
+    + get_int()*
+    + set_float()*
+    + get_float()*
+    + set_string()*
+    + get_string()*
+    + set_binary()*
+    + get_binary()*
+  }
+  IUnknown <|-- IAttributeList
+  %% note for IAttributeList "UUID(0x1E5F0AEB_CC7F_4533_A254_401138AD5EE4)"
+
+  class IStreamAttributes {
+    <<interface>>
+    + get_filename()*
+    + get_attributes()*
+  }
+  IUnknown <|-- IStreamAttributes
+  %% note for IStreamAttributes "UUID(0xD6CE2FFC_EFAF_4B8C_9E74_F1BB12DA44B4)"
+
+  class IAudioProcessor {
+    <<interface>>
+    + set_bus_arrangements()*
+    + get_bus_arrangements()*
+    + can_process_sample_size()*
+    + get_latency_samples()*
+    + setup_processing()*
+    + set_processing()*
+    + process()*
+    + get_tail_samples()*
+  }
+  IUnknown <|-- IAudioProcessor
+  %% note for IAudioProcessor "UUID(0x42043F99_B7DA_453C_A569_E79D9AAEC33D)"
+
+  class IAudioPresentationLatency {
+    <<interface>>
+    + set_audio_presentation_latency_sample()*
+  }
+  IUnknown <|-- IAudioPresentationLatency
+  %% note for IAudioPresentationLatency "UUID(0x309ECE78_EB7D_4fae_8B22_25D909FD08B6)"
+
+  class IProcessContextRequirements {
+    <<interface>>
+    + set_process_context_requirements()*
+  }
+  IUnknown <|-- IProcessContextRequirements
+  %% note for IProcessContextRequirements "UUID(0x2A654303_EF76_4E3D_95B5_FE83730EF6D0)"
+
+  class IAutomationState {
+    <<interface>>
+    + set_automation_state()*
+  }
+  IUnknown <|-- IAutomationState
+  %% note for IAutomationState "UUID(0xB4E8287F_1BB3_46AA_83A4_666768937BAB)"
+
+  class IInfoListener {
+    <<interface>>
+    + set_channel_context_infos()*
+  }
+  IUnknown <|-- IInfoListener
+  %% note for IInfoListener "UUID(0x0F194781_8D98_4ADA_BBA0_C1EFC011D8D0)"
+
+  class IComponent {
+    <<interface>>
+    + get_controller_class_id()*
+    + set_io_mode()*
+    + get_bus_count()*
+    + get_bus_info()*
+    + get_routing_info()*
+    + activate_bus()*
+    + set_active()*
+    + set_state()*
+    + get_state()*
+  }
+  IPluginBase <|-- IComponent
+  %% note for IComponent "UUID(0xE831FF31_F2D5_4301_928E_BBEE25697802)"
+
+  class IComponentHandler3 {
+    <<interface>>
+    + create_context_menu()*
+  }
+  IUnknown <|-- IComponentHandler3
+  %% note for IComponentHandler3 "UUID(0x69F11617_D26B_400D_A4B6_B9647B6EBBAB)"
+
+  class IContextMenuTarget {
+    <<interface>>
+    + execute_menu_item()*
+  }
+  IUnknown <|-- IContextMenuTarget
+  %% note for IContextMenuTarget "UUID(0x3CDF2E75_85D3_4144_BF86_D36BD7C4894D)"
+
+  class IContextMenu {
+    <<interface>>
+    + get_item_count()*
+    + get_item()*
+    + add_item()*
+    + remote_item()*
+    + popup()*
+  }
+  IUnknown <|-- IContextMenu
+  %% note for IContextMenu "UUID(0x2E93C863_0C9C_4588_97DB_ECF5AD17817D)"
+
+  class IComponentHandler {
+    <<interface>>
+    + begin_edit()*
+    + perform_edit()*
+    + end_edit()*
+    + restart_component()*
+  }
+  IUnknown <|-- IComponentHandler
+  %% note for IComponentHandler "UUID(0x93A0BEA3_0BD0_45DB_8E89_0B0CC1E46AC6)"
+
+  class IEditController {
+    <<interface>>
+    + set_component_state()*
+    + set_state()*
+    + get_state()*
+    + get_parameter_count()*
+    + get_parameter_info()*
+    + get_param_string_by_value()*
+    + get_param_value_by_string()*
+    + normalized_param_to_plain()*
+    + plain_param_to_normalized()*
+    + get_param_normalized()*
+    + set_param_normalized()*
+    + set_component_handler()*
+    + create_view()*
+  }
+  IUnknown <|-- IEditController
+  %% note for IEditController "UUID(0xDCD7BBE3_7742_448D_A874_AACC979C759E)"
+
+  class IEditController2 {
+    <<interface>>
+    + set_knob_mode()*
+    + open_help()*
+    + open_about_box()*
+  }
+  IUnknown <|-- IEditController2
+  %% note for IEditController2 "UUID(0x7F4EFE59_F320_4967_AC27_A3AEAFB63038)"
+
+  class IMidiMapping {
+    <<interface>>
+    + get_midi_controller_assignment()*
+  }
+  IUnknown <|-- IMidiMapping
+  %% note for IMidiMapping "UUID(0xDF0FF9F7_49B7_4669_B63A_B7327ADBF5E5)"
+
+  class IComponentHandlerBusActivation {
+    <<interface>>
+    + request_bus_activation()*
+  }
+  IUnknown <|-- IComponentHandlerBusActivation
+  %% note for IComponentHandlerBusActivation "UUID(0x067D02C1_5B4E_274D_A92D_90FD6EAF7240)"
+
+  class IEditControllerHostEditing {
+    <<interface>>
+    + begin_edit_from_host()*
+    + end_edit_from_host()*
+  }
+  IUnknown <|-- IEditControllerHostEditing
+  %% note for IEditControllerHostEditing "UUID(0xC1271208_7059_4098_B9DD_34B36BB0195E)"
+
+  class IProgress {
+    <<interface>>
+    + start()*
+    + update()*
+    + finish()*
+  }
+  IUnknown <|-- IProgress
+  %% note for IProgress "UUID(0x00C9DC5B_9D90_4254_91A3_88C8B4E91B69)"
+
+  class IEventList {
+    <<interface>>
+    + get_event_count()*
+    + get_event()*
+    + add_event()*
+  }
+  IUnknown <|-- IEventList
+  %% note for IEventList "UUID(0x3A2C4214_3463_49FE_B2C4_F397B9695A44)"
+
+  class IHostApplication {
+    <<interface>>
+    + get_name()*
+    + create_instance()*
+  }
+  IUnknown <|-- IHostApplication
+  %% note for IHostApplication "UUID(0x58E595CC_DB2D_4969_8B6A_AF8C36A664E5)"
+
+  class IMessage {
+    <<interface>>
+    + get_message_id()*
+    + set_message_id()*
+    + get_attributes()*
+  }
+  IUnknown <|-- IMessage
+  %% note for IMessage "UUID(0x936F033B_C6C0_47DB_BB08_82F813C1E613)"
+
+  class IConnectionPoint {
+    <<interface>>
+    + connect()*
+    + disconnect()*
+    + notify()*
+  }
+  IUnknown <|-- IConnectionPoint
+  %% note for IConnectionPoint "UUID(0x70A4156F_6E6E_4026_9891_48BFAA60D8D1)"
+
+  class IMidiLearn {
+    <<interface>>
+    + on_live_midi_controller_input()*
+  }
+  IUnknown <|-- IMidiLearn
+  %% note for IMidiLearn "UUID(0x6B2449CC_4197_40B5_AB3C_79DAC5FE5C86)"
+
+  class INoteExpressionController {
+    <<interface>>
+    + get_note_expression_count()*
+    + get_note_expression_info()*
+    + get_note_expression_string_by_value()*
+    + get_note_expression_value_by_string()*
+  }
+  IUnknown <|-- INoteExpressionController
+  %% note for INoteExpressionController "UUID(0xB7F8F859_4123_4872_9116_95814F3721A3)"
+
+  class IKeyswitchController {
+    <<interface>>
+    + get_key_switch_count()*
+    + get_key_switch_info()*
+  }
+  IUnknown <|-- IKeyswitchController
+  %% note for IKeyswitchController "UUID(0x1F2F76D3_BFFB_4B96_B995_27A55EBCCEF4)"
+
+  class IParamValueQueue {
+    <<interface>>
+    + get_parameter_id()*
+    + get_point_count()*
+    + get_point()*
+    + add_point()*
+  }
+  IUnknown <|-- IParamValueQueue
+  %% note for IParamValueQueue "UUID(0x01263A18_ED07_4F6F_98C9_D3564686F9BA)"
+
+  class IParameterChanges {
+    <<interface>>
+    + get_parameter_count()*
+    + get_parameter_data()*
+    + add_parameter_data()*
+  }
+  IUnknown <|-- IParameterChanges
+  %% note for IParameterChanges "UUID(0xA4779663_0BB6_4A56_B443_84A8466FEB9D)"
+
+  class IParameterFunctionName {
+    <<interface>>
+    + get_parameter_id_from_function_name()*
+  }
+  IUnknown <|-- IParameterFunctionName
+  %% note for IParameterFunctionName "UUID(0x6D21E1DC_9119_9D4B_A2A0_2FEF6C1AE55C)"
+
+  class INoteExpressionPhysicalUIMapping {
+    <<interface>>
+    + get_physical_ui_mapping()*
+  }
+  IUnknown <|-- INoteExpressionPhysicalUIMapping
+  %% note for INoteExpressionPhysicalUIMapping "UUID(0xB03078FF_94D2_4AC8_90CC_D303D4133324)"
+
+  class IPlugInterfaceSupport {
+    <<interface>>
+    + is_pluginterface_supported()*
+  }
+  IUnknown <|-- IPlugInterfaceSupport
+  %% note for IPlugInterfaceSupport "UUID(0x4FB58B9E_9EAA_4E0F_AB36_1C1CCCB56FEA)"
+
+  class IParameterFinder {
+    <<interface>>
+    + find_parameter()*
+  }
+  IUnknown <|-- IParameterFinder
+  %% note for IParameterFinder "UUID(0x0F618302_215D_4587_A512_073C77B9D383)"
+
+  class IPrefetchableSupport {
+    <<interface>>
+    + get_prefetchable_support()*
+  }
+  IUnknown <|-- IPrefetchableSupport
+  %% note for IPrefetchableSupport "UUID(0x8AE54FDA_E930_46B9_A285_55BCDC98E21E)"
+
+  class IXmlRepresentationController {
+    <<interface>>
+    + get_xml_representation()*
+  }
+  IUnknown <|-- IXmlRepresentationController
+  %% note for IXmlRepresentationController "UUID(0xA81A0471_48C3_4DC4_AC30_C9E13C8393D5)"
+
+  class IUnitHandler {
+    <<interface>>
+    + notify_unit_selection()*
+    + notify_program_list_change()*
+  }
+  IUnknown <|-- IUnitHandler
+  %% note for IUnitHandler "UUID(0x4B5147F8_4654_486B_8DAB_30BA163A3C56)"
+
+  class IUnitHandler2 {
+    <<interface>>
+    + notify_unit_by_bus_change()*
+  }
+  IUnitHandler <|-- IUnitHandler2
+  %% note for IUnitHandler2 "UUID(0xF89F8CDF_699E_4BA5_96AA_C9A481452B01)"
+
+  class IUnitInfo {
+    <<interface>>
+    + get_unit_count()*
+    + get_unit_info()*
+    + get_program_list_count()*
+    + get_program_list_info()*
+    + get_program_name()*
+    + get_program_info()*
+    + has_program_pitch_names()*
+    + get_program_pitch_name()*
+    + get_selected_unit()*
+    + select_unit()*
+    + get_unit_by_bus()*
+    + set_unit_program_data()*
+  }
+  IUnknown <|-- IUnitInfo
+  %% note for IUnitInfo "UUID(0x3D4BD6B5_913A_4FD2_A886_E768A5EB92C1)"
+
+  class IProgramListData {
+    <<interface>>
+    + program_data_supported()*
+    + get_program_data()*
+    + set_program_data()*
+  }
+  IUnknown <|-- IProgramListData
+  %% note for IProgramListData "UUID(0x8683B01F_7B35_4F70_A265_1DEC353AF4FF)"
+
+  class IUnitData {
+    <<interface>>
+    + unit_data_supported()*
+    + get_unit_data()*
+    + set_unit_data()*
+  }
+  IUnknown <|-- IUnitData
+  %% note for IUnitData "UUID(0x6C389611_D391_455D_B870_B83394A0EFDD)"
