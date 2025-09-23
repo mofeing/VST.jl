@@ -24,6 +24,28 @@ Get the vtable type corresponding to an interface type.
 function vtable_type end
 
 """
+    interfaces(::Type)
+
+Get the list of interfaces implemented by a coclass type.
+"""
+function interfaces end
+
+"""
+    getvtable(::Type{Interface}, obj::CoClass) where {Interface, CoClass}
+
+Get the vtable of the specified interface from a coclass instance.
+"""
+function getvtable(::Type{Interface}, obj::CoClass) where {Interface, CoClass}
+    # @assert Interface ∈ interfaces(CoClass) "$Interface is not implemented by $CoClass"
+    return _gen_getvtable(Interface, obj)
+end
+
+@generated function _gen_getvtable(::Type{Interface}, obj::CoClass) where {Interface, CoClass}
+    vtable_field_name = Symbol(:vtable_, Interface)
+    return :(obj.$vtable_field_name)
+end
+
+"""
     @interface name[<:T] UUID(...) begin
         method1
         method2
@@ -72,6 +94,8 @@ end
     release
 end
 
+# TODO support constructors?
+# TODO support `mutable struct`
 """
     @coclass name <: Interface1[, Interface2, ...] begin
         field1::Type1
@@ -108,6 +132,11 @@ macro coclass(class, fields)
             $(vtable_exprs...)
             $(fields...)
         end
+
+        # TODO generated constructor that initializes vtable fields
+
+        $COM.interfaces(::Type{$(esc(name))}) = ($(interfaces...),)
+        $COM.interfaces(::$(esc(name))) = interfaces($(esc(name)))
     end
 end
 
