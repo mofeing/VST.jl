@@ -1,0 +1,4 @@
+[deps]
+JuliaC = "acedd4c2-ced6-4a15-accc-2607eb759ba2"
+StaticStrings = "4db0a0c5-418a-4e1d-8806-cb305fe13294"
+VST = "6254dac8-befd-4d8f-9211-e35b0e845af1"
