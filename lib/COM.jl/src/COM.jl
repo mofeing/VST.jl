@@ -1,6 +1,7 @@
 module COM
 
-export @interface, @coclass, iid, IUnknown
+export @interface, @coclass, IUnknown
+public iid
 
 """
     iid(::Type)
@@ -46,6 +47,8 @@ end
     return :(obj.$vtable_field_name)
 end
 
+struct MethodSignature{RT, Args} end
+
 """
     @interface name[<:T] UUID(...) begin
         method1
@@ -90,10 +93,14 @@ macro interface(name, _iid, _methods)
 end
 
 @interface IUnknown UUID(0x00000000_00000000_C0000000_00000046) begin
-    query_interface
-    add_ref
-    release
+    query_interface # ::MethodSignature{Cint, (Ptr{Cvoid}, UUID, Ptr{Ptr{Cvoid}})}
+    add_ref # ::MethodSignature{UInt32, (Ptr{Cvoid},)}
+    release # ::MethodSignature{UInt32, (Ptr{Cvoid},)}
 end
+
+is_emitting_c_code() = haskey(Base.ENV, "JULIA_COM_EMIT_C_TARGET_FILE")
+
+const RTLD_SELF = Ptr{Cvoid}(-3)
 
 # TODO support constructors?
 # TODO support `mutable struct`
@@ -129,26 +136,34 @@ macro coclass(class, fields)
     end
 
     # TODO should we use Ptr or RefValue?
-    vtable_ptrs = map(interfaces) do iface
-        vtable_type = Meta.quot(:(COM.vtable_type($iface)))
-        quote
-            const $(esc(Symbol("vtable#", iface, "#", name)))::Ptr{eval($vtable_type)} = Ptr{eval($vtable_type)}(C_NULL)
-            # const $(esc(Symbol("vtable#", iface, "#", name)))::$(Base.RefValue){eval($vtable_type)} = $(Base.RefValue){eval($vtable_type)}()
-        end
-    end
+    # vtable_ptrs = map(interfaces) do iface
+    #     vtable_type = Meta.quot(:(COM.vtable_type($iface)))
+    #     quote
+    #         const $(esc(Symbol("vtable#", iface, "#", name)))::Ptr{eval($vtable_type)} = Ptr{eval($vtable_type)}(C_NULL)
+    #         # const $(esc(Symbol("vtable#", iface, "#", name)))::$(Base.RefValue){eval($vtable_type)} = $(Base.RefValue){eval($vtable_type)}()
+    #     end
+    # end
 
-    # TODO how do we initialize vtable pointers?
+    # TODO how do we initialize vtable pointers? => on C code
     return quote
         @eval struct $name
             $(vtable_fields...)
             $(data_fields...)
 
             function $name(args...)
-                return new($([Symbol("vtable#", iface, "#", name) for iface in interfaces]...), args...)
+                return new(
+                    $(
+                        map(interfaces) do iface
+                            vtable_sym = Meta.quot(Symbol("__vtable_", iface, "_", name))
+                            :(cglobal(($vtable_sym, $RTLD_SELF)))
+                        end...
+                    ),
+                    args...
+                )
             end
         end
 
-        $(vtable_ptrs...)
+        # $(vtable_ptrs...)
 
         $COM.interfaces(::Type{$(esc(name))}) = ($(interfaces...),)
         $COM.interfaces(::$(esc(name))) = interfaces($(esc(name)))
